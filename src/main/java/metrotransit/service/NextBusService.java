@@ -1,8 +1,11 @@
 package metrotransit.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import metrotransit.domain.Route;
 import metrotransit.http.FoundationForMT;
 
 
@@ -21,5 +24,7 @@ public class NextBusService {
 	}
 	
 	
-	private 
+	private List<Route> fetchRoutes() {
+		return adapter.getAllRoutesFromMT();
+	}
 }

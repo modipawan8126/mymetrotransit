@@ -1,6 +1,8 @@
 package metrotransit.http;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
@@ -9,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import metrotransit.domain.Route;
 
 
 @Service
@@ -22,7 +26,7 @@ public class FoundationForMT {
 	@Autowired
 	APIConnectionProvider connection;
 	
-	public String getAllRoutesFromMT() throws IOException {
+	public List<Route> getAllRoutesFromMT() throws IOException {
 				 
 		LOGGER.info("Fetching all routes");
 		 		 
@@ -41,7 +45,8 @@ public class FoundationForMT {
 		String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 		LOGGER.info("Route Response: " + responseString);
 
-		return responseString;
+		
+		return new ArrayList<Route>();
 	}
 
 	public String getMtRoutesUrl() {
