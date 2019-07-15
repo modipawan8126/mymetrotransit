@@ -2,26 +2,31 @@ package metrotransit.domain;
 
 public class Route {
 
-	private String description;
-	private int providerID;
-	private int route;
+	private String Description;	               
+	private int ProviderID;
+	private int Route;
+	
+	public Route() {
+		
+	}
 	public String getDescription() {
-		return description;
+		return Description;
 	}
 	public void setDescription(String description) {
-		this.description = description;
+		Description = description;
 	}
 	public int getProviderID() {
-		return providerID;
+		return ProviderID;
 	}
 	public void setProviderID(int providerID) {
-		this.providerID = providerID;
+		ProviderID = providerID;
 	}
 	public int getRoute() {
-		return route;
+		return Route;
 	}
 	public void setRoute(int route) {
-		this.route = route;
+		Route = route;
 	}
+	
 	
 }

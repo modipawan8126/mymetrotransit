@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import metrotransit.domain.Route;
+import metrotransit.util.ExtendedJacksonObjectMapper;
 
 
 @Service
@@ -20,11 +21,14 @@ public class FoundationForMT {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(FoundationForMT.class.getSimpleName());
 
-	@Value("${mt.mt.getroutes}")
+	@Value("${mt.getroutes}")
 	private String mtRoutesUrl;
 	 
 	@Autowired
 	APIConnectionProvider connection;
+	
+	@Autowired
+	ExtendedJacksonObjectMapper objectMapper;
 	
 	public List<Route> getAllRoutesFromMT() throws IOException {
 				 
@@ -44,9 +48,11 @@ public class FoundationForMT {
 
 		String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 		LOGGER.info("Route Response: " + responseString);
-
 		
-		return new ArrayList<Route>();
+		List<Route> routeList = objectMapper.convertJSonListStringToPojoList(responseString, Route.class);
+		LOGGER.info("Total routes found " + routeList.size());
+		
+		return routeList;
 	}
 
 	public String getMtRoutesUrl() {

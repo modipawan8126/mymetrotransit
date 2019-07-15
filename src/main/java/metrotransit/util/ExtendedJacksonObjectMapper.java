@@ -1,12 +1,12 @@
 package metrotransit.util;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,25 +14,12 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+@Service
 public class ExtendedJacksonObjectMapper extends ObjectMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(ExtendedJacksonObjectMapper.class);
 
-	public <T> LinkedList<T> convertJSonStringToLinkedListPojo(List<String> jsonStringList, Class<T> clazz)
-			throws Exception {
-		logger.info("JsonStringList received for convertJSonStringToLinkedListPojo: " + jsonStringList);
-		LinkedList<T> tList = new LinkedList<T>();
-
-		if (isListNotEmpty(jsonStringList)) {
-			for (String string : jsonStringList) {
-				T t = readValue(string, clazz);
-				tList.add(t);
-			}
-		}
-
-		logger.info("Size of list: " + tList.size());
-		return tList;
-	}
+	
 
 	public <T> ConcurrentLinkedQueue<T> convertJSonStringToConcurrentLinkedQueuePojo(List<String> jsonStringList,
 			Class<T> clazz) throws Exception {
@@ -92,7 +79,7 @@ public class ExtendedJacksonObjectMapper extends ObjectMapper {
 
 	}
 
-	public boolean isListNotEmpty(List t) {
+	public static boolean isListNotEmpty(List t) {
 		if (t != null && t.size() > 0) {
 			return true;
 		}

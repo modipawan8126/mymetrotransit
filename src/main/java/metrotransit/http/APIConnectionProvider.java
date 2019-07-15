@@ -26,11 +26,12 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import metrotransit.constant.MetroTransitConstant;
 
 
-
+@Service
 public class APIConnectionProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger("Core_APIConnectionProvider");
