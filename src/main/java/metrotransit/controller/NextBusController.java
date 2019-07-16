@@ -10,23 +10,33 @@ import org.springframework.web.bind.annotation.RestController;
 import metrotransit.domain.NextBusResponse;
 import metrotransit.service.NextBusService;
 
+/**
+ * @author pawan Modi
+ *
+ */
 @RestController
 public class NextBusController {
 
 	private static final Logger log = LoggerFactory.getLogger(NextBusController.class.getSimpleName());
-	
+
 	@Autowired
 	NextBusService nextBusService;
-	
-	@GetMapping(value = "/nextbus/{route}/{stop}/{direction}") // Here route is route number, stop is 4 char stop code, direction is string direction
-	public NextBusResponse getNextBus(@PathVariable String route, @PathVariable String stop, @PathVariable String direction) {
+
+	/**
+	 * @param route
+	 * @param stop
+	 * @param direction
+	 * @return
+	 * 
+	 * 		This is api method to get next bus json resposne with minutes to next
+	 *         bus with exact scheduled time of departure. Along with route, stop,
+	 *         direction & departures information for given inputs.
+	 */
+	@GetMapping(value = "/nextbus/{route}/{stop}/{direction}")  
+	public NextBusResponse getNextBusForGivenRouteStopDirection(@PathVariable String route, @PathVariable String stop,
+			@PathVariable String direction) {
 		log.info("######### Next Bust Request: " + route + "|" + stop + "|" + direction);
 		return nextBusService.getNextBus(route, stop, direction);
 	}
-	
-	/*@GetMapping(value = "/nextbus/{source}/{target}/{direction}") // Here route is route number, stop is 4 char stop code, direction is string direction
-	public NextBusResponse getNextBusBetweenTwoStops(@PathVariable String source, @PathVariable String target, @PathVariable String direction) {
-		log.info("######### Next Bust Request between: " + source + " & " + target);
-		return nextBusService.getNextBusBetweenTwoStops(source, target, direction);
-	}*/
+
 }

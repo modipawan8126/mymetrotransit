@@ -6,7 +6,7 @@ public class Stop {
 
 	@JsonProperty("Text")
 	private String Text;
-	
+
 	@JsonProperty("Value")
 	private String Value;
 
@@ -25,7 +25,5 @@ public class Stop {
 	public void setValue(String value) {
 		Value = value;
 	}
-	
-	 
-	
+
 }

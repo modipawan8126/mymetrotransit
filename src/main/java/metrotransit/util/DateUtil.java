@@ -4,6 +4,13 @@ import java.util.Date;
 
 public class DateUtil {
 
+	/**
+	 * @param timeStamp
+	 * @return
+	 * 
+	 * 		This method to calculate minutes difference between next bus
+	 *         departure time to current system time.
+	 */
 	public static Long getTimeToNextBus1(String timeStamp) {
 
 		long milliseconds1 = Long.parseLong(getEpochTimeStamp(timeStamp));

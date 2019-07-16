@@ -7,10 +7,19 @@ import org.codehaus.jackson.map.DeserializationConfig.Feature;
 
 public class JsonObjectMapper {
 
+	/**
+	 * @param jsonString
+	 * @param source
+	 * @return
+	 * @throws IOException
+	 * 
+	 *             This method to convert JSON resposne from MetroTransit Api to
+	 *             domain object.
+	 */
 	public static <T> T convertJsonToObject(String jsonString, Class<T> source) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
-		//objectMapper.disable(Feature.FAIL_ON_UNKNOWN_PROPERTIES);
-		objectMapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);			
+		// objectMapper.disable(Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+		objectMapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		objectMapper.enable(Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 		return objectMapper.readValue(jsonString, source);
 	}

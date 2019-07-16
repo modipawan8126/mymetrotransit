@@ -40,7 +40,6 @@ public class TimePointDeparture {
 	@JsonProperty("VehicleHeading")
 	private String VehicleHeading;
 
-	 
 	public String getVehicleLongitude() {
 		return VehicleLongitude;
 	}

@@ -4,7 +4,6 @@ import java.util.List;
 
 public class NextBusResponse {
 
-	
 	long minutesToNextBus;
 	String nextBusScheduledTime;
 	String status;
@@ -13,10 +12,6 @@ public class NextBusResponse {
 	Direction direction;
 	Stop stop;
 	List<TimePointDeparture> departures;
-	
-	
-	
-	 
 
 	public Route getRoute() {
 		return route;
@@ -33,8 +28,6 @@ public class NextBusResponse {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
-
-	 
 
 	public Stop getStop() {
 		return stop;
@@ -84,7 +77,4 @@ public class NextBusResponse {
 		this.failureMessage = failureMessage;
 	}
 
-	 
-
-	 
 }

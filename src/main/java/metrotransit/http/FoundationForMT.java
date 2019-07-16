@@ -14,7 +14,6 @@ import metrotransit.domain.Direction;
 import metrotransit.domain.Route;
 import metrotransit.domain.Stop;
 import metrotransit.domain.TimePointDeparture;
-import metrotransit.util.ExtendedJacksonObjectMapper;
 import metrotransit.util.JsonObjectMapper;
 
 @Service
@@ -46,9 +45,16 @@ public class FoundationForMT {
 	@Autowired
 	APIConnectionProvider connection;
 
-	@Autowired
-	ExtendedJacksonObjectMapper objectMapper;
-
+	/**
+	 * @param routeid
+	 * @param directionid
+	 * @param stopcode
+	 * @return
+	 * @throws IOException
+	 * 
+	 *             This method to call HTTP adapter component to fetch departures
+	 *             for given inputs.
+	 */
 	public TimePointDeparture[] getAllTimePointDepartureForGivenRouteDirectionStop(String routeid, String directionid,
 			String stopcode) throws IOException {
 		LOGGER.info("Fetching all departures for routeid " + routeid + " & direction " + directionid + " & stop "
@@ -77,6 +83,15 @@ public class FoundationForMT {
 		return departures;
 	}
 
+	/**
+	 * @param routeid
+	 * @param directionid
+	 * @return
+	 * @throws IOException
+	 * 
+	 *             This method to call HTTP adapter component to fetch stop for
+	 *             given inputs.
+	 */
 	public Stop[] getAllStopsForGivenRouteAndDirection(String routeid, String directionid) throws IOException {
 		LOGGER.info("Fetching all Stops for routeid " + routeid + " & direction " + directionid);
 
@@ -101,6 +116,14 @@ public class FoundationForMT {
 		return stops;
 	}
 
+	/**
+	 * @param routeid
+	 * @return
+	 * @throws IOException
+	 * 
+	 *             This method to call HTTP adapter component to fetch direction for
+	 *             given inputs.
+	 */
 	public Direction[] getAllDirectionsForGivenRoute(String routeid) throws IOException {
 		LOGGER.info("Fetching all Direction for routeid " + routeid);
 
@@ -125,6 +148,13 @@ public class FoundationForMT {
 		return directions;
 	}
 
+	/**
+	 * @return
+	 * @throws IOException
+	 * 
+	 *             This method to call HTTP adapter component to fetch routes for
+	 *             given inputs.
+	 */
 	public Route[] getAllRoutesFromMT() throws IOException {
 
 		LOGGER.info("Fetching all routes");
@@ -138,12 +168,6 @@ public class FoundationForMT {
 
 		String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
 		LOGGER.info("Route Response: " + responseString);
-
-		// List<Route> routeList =
-		// objectMapper.convertJSONStringToListOfObject2(responseString, Route.class);
-		// Route []routes =
-		// objectMapper.convertJSonListStringToPojoArray(responseString);
-		// Routes routes = objectMapper.convertJSonListStringToPojo(responseString);
 
 		Route[] routes = JsonObjectMapper.convertJsonToObject(responseString, Route[].class);
 

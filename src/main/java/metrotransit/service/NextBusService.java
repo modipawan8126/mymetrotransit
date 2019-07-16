@@ -26,53 +26,27 @@ public class NextBusService {
 	@Autowired
 	FoundationForMT adapter;
 
-	/*
-	 * public NextBusResponse getNextBusBetweenTwoStops(String source, String
-	 * target, String direction) { NextBusResponse nextBusResponse = new
-	 * NextBusResponse();
+	/**
+	 * @param route
+	 * @param stop
+	 * @param direction
+	 * @return
 	 * 
-	 * //Fetching all routes Route[] routeList = fetchRoutes();
-	 * 
-	 * //Find matching route for given user route name Route matchingRoute =
-	 * getMatchingRouteCode(route, routeList);
-	 * nextBusResponse.setRoute(matchingRoute); if (matchingRoute == null) {
-	 * log.error("No Matching route found. Check input!!!"); return nextBusResponse;
-	 * }
-	 * 
-	 * //now call direction api by passing route code to get direction id
-	 * Direction[] directions = fetchDirections(matchingRoute); // Retrieve
-	 * direction numberi value out of it. Direction matchingDirection =
-	 * getMatchingDirection(direction, directions);
-	 * nextBusResponse.setDirection(matchingDirection); if (matchingDirection ==
-	 * null) { log.error("No Matching direction found. Check input!!!"); return
-	 * nextBusResponse; }
-	 * 
-	 * //now call stop operation by passing route id and direction to get stop-id
-	 * Stop[] stops = fetchStops(matchingRoute, matchingDirection); // retrieve 4
-	 * digit stop id. Stop matchingStop = getMatchingStop(stop, stops);
-	 * nextBusResponse.setStop(matchingStop); if (matchingStop == null) {
-	 * log.error("No Matching stop found. Check input!!!"); return nextBusResponse;
-	 * }
-	 * 
-	 * //Now call time point departure operation 6 by passing route, direction id &
-	 * stopcode to get departure info. TimePointDeparture[] departures =
-	 * fetchTimePointDepartures(matchingRoute, matchingDirection, matchingStop);
-	 * //retrieve next bus time and return. TimePointDeparture matchingDeparture =
-	 * getNextBusDeparture(departures);
-	 * nextBusResponse.setDeparture(matchingDeparture); if (matchingDeparture ==
-	 * null) { log.error("No next departure found for given input. Check input!!");
-	 * return nextBusResponse; }
-	 * 
-	 * return nextBusResponse; }
+	 * This is api method to get next bus json resposne with minutes to next
+	 *         bus with exact scheduled time of departure. Along with route, stop,
+	 *         direction & departures information for given inputs.
+	 *         
+	 *      
+	 *  This business layer method communicate with http adapter to fetch data from metrotrasit apis.
+	 *  This class filter & process data to get desired output.       
 	 */
-
 	public NextBusResponse getNextBus(String route, String stop, String direction) {
 		NextBusResponse nextBusResponse = new NextBusResponse();
 
-		// Fetching all routes
+		// 1. Fetching all routes
 		Route[] routeList = fetchRoutes();
 
-		// Find matching route for given user route name
+		// 2. Retrieve matching route for given user input route name
 		Route matchingRoute = getMatchingRouteCode(route, routeList);
 		nextBusResponse.setRoute(matchingRoute);
 		if (matchingRoute == null) {
@@ -82,9 +56,10 @@ public class NextBusService {
 			return nextBusResponse;
 		}
 
-		// now call direction api by passing route code to get direction id
+		// 3. Now calling direction api by passing route code to get direction id
 		Direction[] directions = fetchDirections(matchingRoute);
-		// Retrieve direction numberi value out of it.
+		
+		// 4. Retrieve matching direction value out of it.
 		Direction matchingDirection = getMatchingDirection(direction, directions);
 		nextBusResponse.setDirection(matchingDirection);
 		if (matchingDirection == null) {
@@ -94,9 +69,10 @@ public class NextBusService {
 			return nextBusResponse;
 		}
 
-		// now call stop operation by passing route id and direction to get stop-id
+		// 5. Now calling stop api by passing route-id and direction to get stop-code
 		Stop[] stops = fetchStops(matchingRoute, matchingDirection);
-		// retrieve 4 digit stop id.
+				
+		// 6. Retrieve matching stop as per user input.
 		Stop matchingStop = getMatchingStop(stop, stops);
 		nextBusResponse.setStop(matchingStop);
 		if (matchingStop == null) {
@@ -106,8 +82,7 @@ public class NextBusService {
 			return nextBusResponse;
 		}
 
-		// Now call time point departure operation 6 by passing route, direction id &
-		// stopcode to get departure info.
+		// 7. Now calling Time-point departure operation by passing route, direction & stop code to get departures info.
 		TimePointDeparture[] departures = fetchTimePointDepartures(matchingRoute, matchingDirection, matchingStop);
 		if (departures == null || departures.length == 0) {
 			log.error("No departure found for given input. Check input!!");
@@ -116,7 +91,7 @@ public class NextBusService {
 			return nextBusResponse;
 		}
 
-		// retrieve next bus time and return.
+		// 8. Retrieve next bus time for given inputs.
 		getMinutesToNextBusDeparture(departures, nextBusResponse);
 		if (nextBusResponse.getMinutesToNextBus() == 0) {
 			log.error("No next departure found for given input. Check input!!");
@@ -124,12 +99,17 @@ public class NextBusService {
 			nextBusResponse.setFailureMessage("No next departure found for given input. Check input!!");
 			return nextBusResponse;
 		} else {
-			nextBusResponse.setStatus("SUCCESS");			 
+			nextBusResponse.setStatus("SUCCESS");
 		}
 
 		return nextBusResponse;
 	}
 
+	/**
+	 * @param departures
+	 * @param nextBusResponse
+	 * This method to process & get minutes to next bus.
+	 */
 	private void getMinutesToNextBusDeparture(TimePointDeparture[] departures, NextBusResponse nextBusResponse) {
 
 		List<Long> minList = new ArrayList<Long>();
@@ -152,6 +132,13 @@ public class NextBusService {
 
 	}
 
+	/**
+	 * @param stop
+	 * @param stops
+	 * @return
+	 * 
+	 * This method is to get matching stop from given list of stop.
+	 */
 	private Stop getMatchingStop(String stop, Stop[] stops) {
 		Stop matchingStop = null;
 		for (Stop s : stops) {
@@ -165,6 +152,13 @@ public class NextBusService {
 		return matchingStop;
 	}
 
+	/**
+	 * @param direction
+	 * @param directions
+	 * @return
+	 * 
+	 * This method is to get direction from given list of directions. 
+	 */
 	private Direction getMatchingDirection(String direction, Direction[] directions) {
 		Direction matchingDirection = null;
 		for (Direction d : directions) {
@@ -178,6 +172,13 @@ public class NextBusService {
 		return matchingDirection;
 	}
 
+	/**
+	 * @param routeName
+	 * @param routeList
+	 * @return
+	 * 
+	 * This method is to get matching route from given list of routes.
+	 */
 	private Route getMatchingRouteCode(String routeName, Route[] routeList) {
 		Route matchingRoute = null;
 		for (Route route : routeList) {
@@ -191,6 +192,14 @@ public class NextBusService {
 		return matchingRoute;
 	}
 
+	/**
+	 * @param route
+	 * @param direction
+	 * @param stop
+	 * @return
+	 * 
+	 * This method to call HTTP adapter component to fetch departures for given inputs. 
+	 */
 	private TimePointDeparture[] fetchTimePointDepartures(Route route, Direction direction, Stop stop) {
 		try {
 			return adapter.getAllTimePointDepartureForGivenRouteDirectionStop(route.getRoute(), direction.getValue(),
@@ -202,6 +211,13 @@ public class NextBusService {
 		}
 	}
 
+	/**
+	 * @param route
+	 * @param direction
+	 * @return
+	 * 
+	 * This method to call HTTP adapter component to fetch stops for given inputs.
+	 */
 	private Stop[] fetchStops(Route route, Direction direction) {
 		try {
 			return adapter.getAllStopsForGivenRouteAndDirection(route.getRoute(), direction.getValue());
@@ -212,6 +228,12 @@ public class NextBusService {
 		}
 	}
 
+	/**
+	 * @param route
+	 * @return
+	 * 
+	 * This method to call HTTP adapter component to fetch directions for given inputs.
+	 */
 	private Direction[] fetchDirections(Route route) {
 		try {
 			return adapter.getAllDirectionsForGivenRoute(route.getRoute());
@@ -222,6 +244,11 @@ public class NextBusService {
 		}
 	}
 
+	/**
+	 * @return
+	 * 
+	 * This method to call HTTP adapter component to fetch all routes.
+	 */
 	private Route[] fetchRoutes() {
 		try {
 			return adapter.getAllRoutesFromMT();
