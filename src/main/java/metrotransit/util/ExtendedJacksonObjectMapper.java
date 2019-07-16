@@ -10,9 +10,13 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import metrotransit.domain.Route;
 
 @Service
 public class ExtendedJacksonObjectMapper extends ObjectMapper {
@@ -65,9 +69,10 @@ public class ExtendedJacksonObjectMapper extends ObjectMapper {
 
 	}
 
-	public <T> List<T> convertJSonListStringToPojoList(String jsonListString, Class<T> clazz)
+	public <T> List<T> convertJSonListStringToPojoList1(String jsonListString, Class<T> clazz)
 			throws JsonParseException, JsonMappingException, IOException {
 		logger.info("JsonListString received in convertJSonListStringToPojoList: " + jsonListString);
+		 
 		List<T> tList = null;
 		if (jsonListString != null && jsonListString.trim().length() > 0) {
 			tList = readValue(jsonListString,
@@ -78,6 +83,55 @@ public class ExtendedJacksonObjectMapper extends ObjectMapper {
 		return tList;
 
 	}
+	
+	public <T> List<T> convertJSONStringToListOfObject2(String jsonString, Class<T> type) throws IOException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		/*objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);		 
+		objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);*/
+		return objectMapper.readValue(jsonString,
+				TypeFactory.defaultInstance().constructCollectionType(List.class, type));
+	}
+	
+	public List<Route> convertJSonListStringToPojoList(String jsonListString)
+			throws JsonParseException, JsonMappingException, IOException {
+		logger.info("JsonListString received in convertJSonListStringToPojoList: " + jsonListString);
+		 
+		List<Route> myObjects = null;
+		if (jsonListString != null && jsonListString.trim().length() > 0) {
+			/*tList = readValue(jsonListString,
+					TypeFactory.defaultInstance().constructCollectionLikeType(List.class, clazz));*/
+			 //myObjects = readValue(jsonListString, new TypeReference<List<Route>>(){});
+			disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+			Route[] routes = readValue(jsonListString, Route[].class);
+
+			logger.info("Size of List created: " + myObjects.size());
+		}
+
+		return myObjects;
+
+	}
+	
+	public Route[] convertJSonListStringToPojoArray(String jsonListString)
+			throws JsonParseException, JsonMappingException, IOException {
+		logger.info("JsonListString received in convertJSonListStringToPojoList: " + jsonListString);
+		 
+		Route[] routes = null;
+		if (jsonListString != null && jsonListString.trim().length() > 0) {
+			 
+			disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+			routes = readValue(jsonListString, Route[].class);
+
+			logger.info("Size of List created: " + routes.length);
+		}
+
+		return routes;
+
+	}
+	
+	 
+	
+	
 
 	public static boolean isListNotEmpty(List t) {
 		if (t != null && t.size() > 0) {

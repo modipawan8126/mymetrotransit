@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import metrotransit.domain.NextBusResponse;
 import metrotransit.service.NextBusService;
 
 @RestController
@@ -18,8 +19,14 @@ public class NextBusController {
 	NextBusService nextBusService;
 	
 	@GetMapping(value = "/nextbus/{route}/{stop}/{direction}") // Here route is route number, stop is 4 char stop code, direction is string direction
-	public String getNextBus(@PathVariable String route, @PathVariable String stop, @PathVariable String direction) {
+	public NextBusResponse getNextBus(@PathVariable String route, @PathVariable String stop, @PathVariable String direction) {
 		log.info("######### Next Bust Request: " + route + "|" + stop + "|" + direction);
 		return nextBusService.getNextBus(route, stop, direction);
 	}
+	
+	/*@GetMapping(value = "/nextbus/{source}/{target}/{direction}") // Here route is route number, stop is 4 char stop code, direction is string direction
+	public NextBusResponse getNextBusBetweenTwoStops(@PathVariable String source, @PathVariable String target, @PathVariable String direction) {
+		log.info("######### Next Bust Request between: " + source + " & " + target);
+		return nextBusService.getNextBusBetweenTwoStops(source, target, direction);
+	}*/
 }
