@@ -4,7 +4,7 @@ import java.util.List;
 
 public class NextBusResponse {
 
-	long minutesToNextBus;
+	String minutesToNextBus;
 	String nextBusScheduledTime;
 	String status;
 	String failureMessage;
@@ -45,13 +45,7 @@ public class NextBusResponse {
 		this.departures = departures;
 	}
 
-	public long getMinutesToNextBus() {
-		return minutesToNextBus;
-	}
-
-	public void setMinutesToNextBus(long minutesToNextBus) {
-		this.minutesToNextBus = minutesToNextBus;
-	}
+	 
 
 	public String getNextBusScheduledTime() {
 		return nextBusScheduledTime;
@@ -75,6 +69,14 @@ public class NextBusResponse {
 
 	public void setFailureMessage(String failureMessage) {
 		this.failureMessage = failureMessage;
+	}
+
+	public String getMinutesToNextBus() {
+		return minutesToNextBus;
+	}
+
+	public void setMinutesToNextBus(String minutesToNextBus) {
+		this.minutesToNextBus = minutesToNextBus;
 	}
 
 }
