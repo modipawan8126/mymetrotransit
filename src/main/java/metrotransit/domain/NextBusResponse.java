@@ -6,6 +6,7 @@ public class NextBusResponse {
 
 	String minutesToNextBus;
 	String nextBusScheduledTime;
+	String currentTime;
 	String status;
 	String failureMessage;
 	Route route;
@@ -77,6 +78,14 @@ public class NextBusResponse {
 
 	public void setMinutesToNextBus(String minutesToNextBus) {
 		this.minutesToNextBus = minutesToNextBus;
+	}
+
+	public String getCurrentTime() {
+		return currentTime;
+	}
+
+	public void setCurrentTime(String currentTime) {
+		this.currentTime = currentTime;
 	}
 
 }

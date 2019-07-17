@@ -1,6 +1,9 @@
 package metrotransit.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DateUtil {
 
@@ -24,7 +27,15 @@ public class DateUtil {
 
 		// System.out.println(diffMinutes);
 		return diffMinutes;
-
+	}
+	
+	public static String getCurrentDateTime(String timezone, String dateFormat) {
+		Date date = new Date();
+        DateFormat format = new SimpleDateFormat(dateFormat);
+        format.setTimeZone(TimeZone.getTimeZone(timezone));
+        String formatted = format.format(date);
+        
+        return formatted;
 	}
 
 	private static String getEpochTimeStamp(String s) {

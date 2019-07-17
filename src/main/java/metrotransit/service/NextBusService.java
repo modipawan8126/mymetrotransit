@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import metrotransit.domain.Direction;
@@ -25,6 +26,12 @@ public class NextBusService {
 
 	@Autowired
 	FoundationForMT adapter;
+	
+	@Value("${mt.dateformat}")
+	String dateFormat;
+	
+	@Value("${mt.timezone}")
+	String timezone;
 
 	/**
 	 * @param route
@@ -104,6 +111,11 @@ public class NextBusService {
 			nextBusResponse.setStatus("SUCCESS");
 		}
 
+		log.info(timezone + "|" + dateFormat);
+		String currentTime = DateUtil.getCurrentDateTime(timezone, dateFormat);
+		log.info("Current Time: " + currentTime);
+		nextBusResponse.setCurrentTime(currentTime);
+		
 		return nextBusResponse;
 	}
 
